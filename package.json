@@ -1,0 +1,20 @@
+{
+  "name": "sqless",
+  "version": "1.0.0",
+  "description": "Presents a unified wrapper for simple CRUD operations in multiple SQL-like technologies",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "author": "Adam L. Seale (TenthSpeedWriter)",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3"
+  },
+  "dependencies": {
+    "brototype": "0.0.5",
+    "mysql": "^2.9.0",
+    "q": "^1.4.1"
+  }
+}
