@@ -34,6 +34,15 @@ var Table = function (table_name, connection_method) {
             } else if (Bro(data_to_equalize).giveMeProps().length === 0) {
                 throw Error("ARGUMENT_CANNOT_BE_EMPTY");
             }
+            
+            var keys = Bro(data_to_equalize).giveMeProps(),
+                output_string = keys[0] + "=" + data_to_equalize[keys[0]];
+                
+            for (var iter = 1; iter < keys.length; iter ++) {
+                output_string = output_string + ", " + keys[iter] + "=" + data_to_equalize[keys[iter]];
+            }
+            
+            return output_string;
         };
         
         return this;
