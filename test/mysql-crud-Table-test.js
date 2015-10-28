@@ -79,7 +79,7 @@ describe("Table", function () {
                 expect(table.Query_Promise().equalized_keyvals({})).to.throw("ARGUMENT_CANNOT_BE_EMPTY");
             });
             
-            it("converts an object in a string of arguments and keys paired with '=' and separated by ', '", function () {
+            it("converts an object into a string of arguments and keys paired with '=' and separated by ', '", function () {
                 expect(table.Query_Promise().equalized_keyvals({foo: "bar", baz: "zot"}))
                     .to.eql("foo=bar, baz=zot");
             });
