@@ -8,12 +8,20 @@ var Table = function (table_name, connection_method) {
         config = connection_method.config;
         
     _self.Query_Promise = function () {
-        this.commafied_keys = function (keys) {
-            
+        this.commafied_keys = function (data_to_commafy) {
+            if (typeof data_to_commafy !== 'object') {
+                throw Error("ARGUMENT_MUST_BE_AN_OBJECT");
+            } else if (Bro(data_to_commafy).giveMeProps().length === 0) {
+                throw Error("ARGUMENT_CANNOT_BE_EMPTY");
+            }
         };
         
-        this.equalized_keyvals = function(data) {
-            
+        this.equalized_keyvals = function(data_to_equalize) {
+            if (typeof data_to_equalize !== 'object') {
+                throw Error("ARGUMENT_MUST_BE_AN_OBJECT");
+            } else if (Bro(data_to_equalize).giveMeProps().length === 0) {
+                throw Error("ARGUMENT_CANNOT_BE_EMPTY");
+            }
         };
         
         return this;

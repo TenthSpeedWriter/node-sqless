@@ -1,5 +1,7 @@
 var Table = require("../src/mysql-crud-Table.js"),
-    expect = require("chai").expect,
+    chai = require("chai"),
+    expect = chai.expect,
+    assert = chai.assert,
     mysql = require("mysql"),
     Bro = require("brototype"),
     config = {
@@ -58,8 +60,8 @@ describe("Table", function () {
         
         describe(".commafied_keys()", function () {
             it("throws an error if not given a populated object", function () {
-                expect(table.Query_Promise().commafied_keys(null)).to.throw("ARGUMENT_MUST_BE_AN_OBJECT");
-                expect(table.Query_Promise().commafied_keys({})).to.throw("ARGUMENT_CANNOT_BE_EMPTY");
+                expect(table.Query_Promise().commafied_keys, null).to.throw(Error);
+                expect(table.Query_Promise().commafied_keys, {}).to.throw(Error);
             });
             
             it("converts an object into a string of comma-interspersed keys", function () {
@@ -75,8 +77,8 @@ describe("Table", function () {
         
         describe(".equalized_keyvals()", function () {
             it("throws an error if not given a populated object", function () {
-                expect(table.Query_Promise().equalized_keyvals(null)).to.throw("ARGUMENT_MUST_BE_AN_OBJECT");
-                expect(table.Query_Promise().equalized_keyvals({})).to.throw("ARGUMENT_CANNOT_BE_EMPTY");
+                expect(table.Query_Promise().equalized_keyvals, null).to.throw(Error);
+                expect(table.Query_Promise().equalized_keyvals, {}).to.throw(Error);
             });
             
             it("converts an object into a string of arguments and keys paired with '=' and separated by ', '", function () {
