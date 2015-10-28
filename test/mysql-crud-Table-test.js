@@ -15,29 +15,28 @@ function expect_no_errors(err) {
 }
 
 describe("Table", function () {
-    var table;
+    var table, data_structure;
     beforeEach(function (done) {
         Table("people", {
                 mysql: mysql,
                 config: config
             })
             .then(function (new_table) {
-                table = new_table;
+                table = new_table,
+                data_structure = table.data_structure;
             })
             .catch(function (err) {
                 console.err(err);
+                throw(err);
             })
             .finally(done);
     });
     
-    it("initializes with a .data_structure, a description of the table", function () {
-       var data_structure = table.data_structure;
+    it("initializes with attribute .data_structure, a description of the table", function () {
        expect(data_structure).to.be.ok;
     });
     
     describe(".data_structure", function () {
-        var data_structure = table.data_structure;
-       
         it("has named child objects, at least one of which is 'peopleID'", function () {
             expect(data_structure.peopleID).to.be.ok;
             expect(typeof data_structure.peopleID).to.be.object;
@@ -46,61 +45,97 @@ describe("Table", function () {
         describe(".peopleID", function () {
             ['Type', 'Null', 'Key', 'Default', 'Extra'].map(function (field_name) {
                 it(("has attribute " + field_name), function () {
-                    expect(data_structure.peopleID[field_name]).to.be.ok;
+                    expect(data_structure.peopleID[field_name]).to.not.eql(undefined);
                 });
             });
         });
-    })
-});
-
-/*
-describe("Table", function () {
-    var connection;
-    
-    beforeEach(function () {
-        connection = mysql.create_connection(config);
-        connection.connect();
     });
     
-    afterEach(function () {
-        connection.end();
+    describe("CRUD methods", function () {
+       ['create', 'read', 'update', 'drop'].map(function (function_name) {
+           it(("initializes with method ." + function_name), function () {
+               expect(typeof table[function_name]).to.eql('function');
+           });
+       });
     });
     
-    it("throws an error if not given a valid connection", function () {
-        expect(Table("bad_table", null)).to.throw("BAD_CONNECTION_OBJECT");
+    describe(".c", function () {
+        it("creates a new record without incident", function (done) {
+            table.c({
+                "first_name": "Betty",
+                "last_name": "Newbie",
+                "age": 29
+            })
+                .then(function (data) {
+                    expect(data).to.be.ok;
+                })
+                .catch(expect_no_errors)
+                .finally(done);
+        });
     });
     
-    it("throws an error if not given a valid table_name", function () {
-        expect(Table(null, connection)).to.throw("BAD_TABLE_NAME");
+    describe(".r", function () {
+        it("reads existing records without incident", function (done) {
+            table.r('*')
+                .then(function (data) {
+                    expect(Array.isArray(data)).to.be.true;
+                    expect(typeof data[0].first_name).to.eql('string');
+                })
+                .catch(expect_no_errors)
+                .finally(done);
+        })
     });
     
-    it("returns an object when called", function (done) {
-        Table("good_table", connection)
-            .then(function (data) {
-                expect(typeof data).to.eql('object');
+    describe(".u", function () {
+        it("changes an existing record without incident", function (done) {
+            var personID;
+            
+            table.r('*')
+                .then(function (people) {
+                    personID = people[0].personID;
+                    
+                    table.u(personID, {
+                        "age": 55
+                    })
+                        .then(function (person) {
+                            expect(person.age).to.eql(55);
+                        })
+                        .catch(expect_no_errors)
+                        .finally(done);
+                })
+                .catch(expect_no_errors)
+                .finally(done);
+        });
+    });
+    
+    describe(".d", function () {
+        var personID;
+        
+        beforeEach(function (done) {
+            table.c({
+                first_name: "Stacy",
+                last_name: "Newbie",
+                age: 7
+            })
+            .then(function (new_person) {
+                personID = new_person.personID;
             })
             .catch(expect_no_errors)
             .finally(done);
-    });
-    
-    it("has a method 'query'", function (done) {
-        Table("good_table", connection)
-            .then(function (good_table) {
-                expect(good_table.query).to.be.ok;
-                expect(typeof good_table.query).to.eql('function');
-            })
-            .catch(expect_no_errors)
-            .finally(done);
-    });
-    
-    it("is an object", function () {
-        expect(typeof Table).to.eql("object");
-    });
-    
-    ["create", "read", "update", "drop"].map(function (call_type) {
-        it(("has method " + call_type), function () {
-            expect(typeof Table[call_type]).to.eql("function");
+        });
+        
+        it("creates a record, then deletes it without incident", function (done) {
+            table.d(personID)
+                .then(function () {
+                    table.r(personID)
+                        .then(function (rows) {
+                            expect(rows.length).to.eql(0);
+                            done();
+                        })
+                        .catch(expect_no_errors);
+                })
+                .catch(expect_no_errors)
+                .finally(done);
         });
     });
 });
-*/
