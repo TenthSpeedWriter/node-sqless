@@ -7,7 +7,7 @@ var Table = function (table_name, connection_method) {
         mysql = connection_method.mysql,
         config = connection_method.config;
         
-    this.Query_Promise = function () {
+    _self.Query_Promise = function () {
         this.commafied_keys = function (keys) {
             
         };

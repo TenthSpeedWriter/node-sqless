@@ -51,6 +51,37 @@ describe("Table", function () {
         });
     });
     
+    describe(".Query_Promise", function () {
+        it("has helper method commafied_keys()", function () {
+            expect(typeof table.Query_Promise.commafied_keys).to.eql('function');
+        });
+        
+        describe(".commafied_keys()", function () {
+            it("throws an error if not given a populated object", function () {
+                expect(table.Query_Promise.commafied_keys(null)).to.throw("ARGUMENT_MUST_BE_AN_OBJECT");
+                expect(table.Query_Promise.commafied_keys({})).to.throw("ARGUMENT_CANNOT_BE_EMPTY");
+            });
+            
+            it("converts an object into a string of comma-interspersed keys", function () {
+                var commafied_string = table.Query_Promise.commafied_keys({foo: "bar", baz: "zot"});
+                
+                expect(commafied_string).to.eql("foo, bar");
+            });
+        });
+        
+        describe(".equalized_keyvals()", function () {
+            it("throws an error if not given a populated object", function () {
+                expect(table.Query_Promise.equalized_keyvals(null)).to.throw("ARGUMENT_MUST_BE_AN_OBJECT");
+                expect(table.Query_Promise.equalized_keyvals({})).to.throw("ARGUMENT_CANNOT_BE_EMPTY");
+            });
+            
+            it("converts an object in a string of arguments and keys paired with '=' and separated by ', '", function () {
+                expect(table.Query_Promise.equalized_keyvals({foo: "bar", baz: "zot"}))
+                    .to.eql("foo=bar, baz=zot");
+            });
+        });
+    });
+    
     describe("CRUD methods", function () {
        ['create', 'read', 'update', 'drop'].map(function (function_name) {
            it(("initializes with method ." + function_name), function () {
@@ -68,6 +99,7 @@ describe("Table", function () {
             })
                 .then(function (data) {
                     expect(data).to.be.ok;
+                    expect(data.first_name).to.eql('Betty');
                 })
                 .catch(expect_no_errors)
                 .finally(done);
