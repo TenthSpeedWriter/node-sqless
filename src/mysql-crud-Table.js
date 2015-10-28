@@ -15,6 +15,8 @@ var Table = function (table_name, connection_method) {
         this.equalized_keyvals = function(data) {
             
         };
+        
+        return this;
     };
     
     var table_description_connection = mysql.createConnection(config);
