@@ -16,7 +16,7 @@ function expect_no_errors(err) {
     expect(err).to.not.be.ok;
 }
 
-describe("Table", function () {
+describe("mysql-crud-Table", function () {
     var table, data_structure;
     beforeEach(function (done) {
         Table("people", {
