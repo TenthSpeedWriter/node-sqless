@@ -1,4 +1,5 @@
 var Bro = require("brototype"),
+    intersperse = require("intersperse"),
     q = require("q");
 
 var Table = function (table_name, connection_method) {
@@ -14,6 +15,17 @@ var Table = function (table_name, connection_method) {
             } else if (Bro(data_to_commafy).giveMeProps().length === 0) {
                 throw Error("ARGUMENT_CANNOT_BE_EMPTY");
             }
+            
+            // Could this operation be performed more functionally?
+            var keys = Bro(data_to_commafy).giveMeProps(),
+                commafied_keys = intersperse(keys, ', '),
+                output_string = "";
+                
+            for (var iter = 0; iter < commafied_keys.length; iter ++) {
+                output_string = output_string + commafied_keys[iter];
+            }
+                
+            return output_string;
         };
         
         this.equalized_keyvals = function(data_to_equalize) {

@@ -67,7 +67,7 @@ describe("mysql-crud-Table", function () {
             it("converts an object into a string of comma-interspersed keys", function () {
                 var commafied_string = table.Query_Promise().commafied_keys({foo: "bar", baz: "zot"});
                 
-                expect(commafied_string).to.eql("foo, bar");
+                expect(commafied_string).to.eql("foo, baz");
             });
         });
         
