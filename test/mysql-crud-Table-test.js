@@ -23,8 +23,11 @@ describe("Table", function () {
             })
             .then(function (new_table) {
                 table = new_table;
-                done();
-            });
+            })
+            .catch(function (err) {
+                console.err(err);
+            })
+            .finally(done);
     });
     
     it("initializes with a .data_structure, a description of the table", function () {
