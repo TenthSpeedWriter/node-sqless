@@ -1,5 +1,7 @@
 var Table = require("../src/mysql-crud-Table.js"),
-    expect = require("chai").expect;
+    expect = require("chai").expect,
+    mysql = require("mysql"),
+    config = JSON.parse(require("fs").readFileSync('mysql-crud-test-config', 'utf-8'));
     
 function expect_no_errors(err) {
     console.err(err);
@@ -7,15 +9,15 @@ function expect_no_errors(err) {
 }
 
 describe("Table", function () {
-    var table, connection;
+    var connection;
     
     beforeEach(function (done) {
-        connection = function () {
-            
-        };
-        // BIG TODO: Plug in a mock service of some kind here
+        connection = mysql.create_connection(config);
+        connection.connect();
         done();
     });
+    
+    afterEach(connection.end);
     
     it("throws an error if not given a valid connection", function () {
         expect(Table("bad_table", null)).to.throw("BAD_CONNECTION_OBJECT");
