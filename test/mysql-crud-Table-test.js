@@ -5,10 +5,9 @@ var Table = require("../src/mysql-crud-Table.js"),
     mysql = require("mysql"),
     Bro = require("brototype"),
     config = {
-        "host": "localhost",
+        "host": "0.0.0.0",
         "user": "tenthspeedwriter",
-        "database": "sqless_test",
-        "tables": "*"
+        "database": "c9"
     };
     
 function expect_no_errors(err) {
@@ -16,7 +15,87 @@ function expect_no_errors(err) {
     expect(err).to.not.be.ok;
 }
 
-describe("mysql-crud-Table", function () {
+describe("mysql-crud.Table", function () {
+    var table;
+    
+    beforeEach(function (done) {
+        var connection_method = {
+            config: config,
+            mysql: mysql
+        };
+        
+        table = Table("people", connection_method)
+            .then(function (produced_table) {
+                table = produced_table;
+                done();
+            })
+            .catch(function (err) {
+                expect_no_errors(err);
+                done();
+            });
+    });
+    
+    describe(".data_structure", function () {
+        it("initializes with a description of its table's data structure", function () {
+            expect(table.data_structure[0].Field).to.eql("personID");
+        });
+    });
+    
+    describe(".utils", function () {
+        it("initializes with helper method commafied_keys()", function () {
+            expect(typeof table.utils.commafied_keys).to.eql('function');
+        });
+        
+        describe(".commafied_keys()", function () {
+            it("throws an error if not given a populated object", function () {
+                expect(table.utils.commafied_keys, null).to.throw(Error);
+                expect(table.utils.commafied_keys, {}).to.throw(Error);
+            });
+            
+            it("converts an object into a string of comma-interspersed keys", function () {
+                var commafied_string = table.utils.commafied_keys({foo: "bar", baz: "zot"});
+                
+                expect(commafied_string).to.eql("foo, baz");
+            });
+        });
+        
+        it("initializes with helper method equalized_keyvals()", function () {
+            expect(typeof table.utils.equalized_keyvals).to.eql('function');
+        });
+        
+        describe(".equalized_keyvals()", function () {
+            it("throws an error if not given a populated object", function () {
+                expect(table.utils.equalized_keyvals, null).to.throw(Error);
+                expect(table.utils.equalized_keyvals, {}).to.throw(Error);
+            });
+            
+            it("converts an object into a string of arguments and keys paired with '=' and separated by ', '", function () {
+                expect(table.utils.equalized_keyvals({foo: "bar", baz: "zot"}))
+                    .to.eql("foo=bar, baz=zot");
+            });
+        });
+    })
+    
+    describe(".create()", function () {
+        it("creates a new record without incident", function (done) {
+            table.c({
+                "first_name": "Betty",
+                "last_name": "Newbie",
+                "age": 29
+            })
+                .then(function (data) {
+                    expect(data).to.be.ok;
+                    expect(data.first_name).to.eql('Betty');
+                })
+                .catch(function (err) {
+                    expect(err).to.not.be.ok;
+                })
+                .finally(done);
+        });
+    });
+});
+
+/*describe("mysql-crud-Table", function () {
     var table, data_structure;
     beforeEach(function (done) {
         Table("people", {
@@ -54,38 +133,7 @@ describe("mysql-crud-Table", function () {
     });
     
     describe(".Query_Promise", function () {
-        it("initializes with helper method commafied_keys()", function () {
-            expect(typeof table.Query_Promise().commafied_keys).to.eql('function');
-        });
         
-        describe(".commafied_keys()", function () {
-            it("throws an error if not given a populated object", function () {
-                expect(table.Query_Promise().commafied_keys, null).to.throw(Error);
-                expect(table.Query_Promise().commafied_keys, {}).to.throw(Error);
-            });
-            
-            it("converts an object into a string of comma-interspersed keys", function () {
-                var commafied_string = table.Query_Promise().commafied_keys({foo: "bar", baz: "zot"});
-                
-                expect(commafied_string).to.eql("foo, baz");
-            });
-        });
-        
-        it("initializes with helper method equalized_keyvals()", function () {
-            expect(typeof table.Query_Promise().equalized_keyvals).to.eql('function');
-        });
-        
-        describe(".equalized_keyvals()", function () {
-            it("throws an error if not given a populated object", function () {
-                expect(table.Query_Promise().equalized_keyvals, null).to.throw(Error);
-                expect(table.Query_Promise().equalized_keyvals, {}).to.throw(Error);
-            });
-            
-            it("converts an object into a string of arguments and keys paired with '=' and separated by ', '", function () {
-                expect(table.Query_Promise().equalized_keyvals({foo: "bar", baz: "zot"}))
-                    .to.eql("foo=bar, baz=zot");
-            });
-        });
     });
     
     describe("CRUD methods", function () {
@@ -176,4 +224,4 @@ describe("mysql-crud-Table", function () {
                 .finally(done);
         });
     });
-});
+});*/
