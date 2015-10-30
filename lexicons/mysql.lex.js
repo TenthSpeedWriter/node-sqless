@@ -1,16 +1,18 @@
 var q = require("q"),
+    Bro = require("brototype"),
     utils = require("../util/query-helpers.js");
 
 module.exports = {
     query_strings: {
         create: function (table_name, data) {
+            var keys = Bro(data).giveMeProps();
             return "INSERT INTO "
                         + table_name
                         + " ("
                         + utils.commafied_keys(data)
                         + ") VALUES ("
-                        + utils.ordered_quoted_vals(data)
-                        + ");"
+                        + utils.ordered_quoted_vals(keys, data)
+                        + ");";
         },
         read: function (table_name, filters) {
             if (!filters) {
@@ -35,7 +37,7 @@ module.exports = {
         update: function (table_name, primary_keys, data) {
             
         },
-        delete: function (table_name, primary_keys) {
+        drop: function (table_name, primary_keys) {
             
         }
     }

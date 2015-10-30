@@ -20,7 +20,7 @@ describe("the MySQL lexicon", function () {
                     age: 37
                 };
             it("produces a correctly formatted insert string for Betty Newbie", function () {
-                var correct_response = "INSERT INTO people (first_name, last_name, age) VALUES (Betty, Newbie, 37);";
+                var correct_response = "INSERT INTO people (first_name, last_name, age) VALUES ('Betty', 'Newbie', 37);";
                 
                 expect(create(table_name, betty)).to.eql(correct_response);
             })    
