@@ -3,6 +3,21 @@ var q = require("q"),
     utils = require("../util/query-helpers.js");
 
 module.exports = {
+    query: function (mysql, config, query) {
+        var deferred = q.defer(),
+            connection = mysql.createConnection(config);
+        connection.connect();
+        
+        connection.query(query, function (err, rows, fields) {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve({ rows: rows, fields: fields});
+            }
+        });
+        
+        return deferred.promise;
+    },
     query_strings: {
         c: function (table_name, data) {
             if (!table_name || typeof table_name !== 'string'
@@ -65,6 +80,11 @@ module.exports = {
                                 + " WHERE "
                                 + utils.equalized_keyvals(primary_keys);
             return query_string;
+        },
+        describe_table: function (table_name) {
+            return "DESCRIBE " + table_name + ";";
+            // This would be a good thing to replace with a function that actually
+            // analyzes the structure of the table and phrases it in a standardized way
         }
     }
 };

@@ -8,11 +8,22 @@ describe("the MySQL lexicon", function () {
         expect(typeof lexicon).to.eql("object");
     });
     
+    
     it("has child object query_strings", function () {
         expect(lexicon.query_strings).to.exist;
     });
     
     describe(".query_strings", function () {
+        describe("describe_table", function () {
+            it("has method describe_table", function () {
+                expect(typeof lexicon.query_strings.describe_table).to.eql('function');
+            });
+            
+            it("returns a correctly formatted query to describe a MySQL table", function () {
+                expect(lexicon.query_strings.describe_table('person'))
+                    .to.eql('DESCRIBE person;');
+            })
+        });
         describe("c", function () {
             var c = lexicon.query_strings.c,
                 table_name = "people",
