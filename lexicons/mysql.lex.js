@@ -4,7 +4,12 @@ var q = require("q"),
 
 module.exports = {
     query_strings: {
-        create: function (table_name, data) {
+        c: function (table_name, data) {
+            if (!table_name || typeof table_name !== 'string'
+            || !data || typeof data !== 'object'
+            || Bro(data).giveMeProps().length === 0) {
+                throw Error("BAD_ARGUMENTS");
+            }
             var keys = Bro(data).giveMeProps();
             return "INSERT INTO "
                         + table_name
@@ -14,10 +19,10 @@ module.exports = {
                         + utils.ordered_quoted_vals(keys, data)
                         + ");";
         },
-        read: function (table_name, filters) {
+        r: function (table_name, filters) {
             if (!filters) {
                 return select_all(table_name);
-            } else if (typeof filter === 'object') {
+            } else if (typeof filters === 'object') {
                 return select_by_keyvals(table_name, filters);
             } else {
                 throw Error("BAD_ARGUMENTS");
@@ -29,16 +34,37 @@ module.exports = {
             function select_by_keyvals(table_name, filters) {
                 return "SELECT * FROM "
                         + table_name
-                        + " WHERE ("
+                        + " WHERE "
                         + utils.equalized_keyvals(filters)
-                        + ");"
+                        + ";"
             }
         },
-        update: function (table_name, primary_keys, data) {
-            
+        u: function (table_name, primary_keys, data) {
+            if (!table_name || !primary_keys || !data
+                || Bro(primary_keys).giveMeProps().length === 0
+                || Bro(data).giveMeProps().length === 0) {
+                    throw Error("BAD_ARGUMENTS");
+                }
+            var query_string = "UPDATE "
+                                + table_name
+                                + " SET "
+                                + utils.equalized_keyvals(data)
+                                + " WHERE "
+                                + utils.equalized_keyvals(primary_keys);
+                                + ";";
+            return query_string;
         },
-        drop: function (table_name, primary_keys) {
-            
+        d: function (table_name, primary_keys) {
+            if (!table_name || typeof table_name !== 'string'
+                || !primary_keys || typeof primary_keys !== 'object'
+                || Bro(primary_keys).giveMeProps().length === 0) {
+                    throw Error("BAD_ARGUMENTS");
+                }
+            var query_string = "DELETE FROM "
+                                + table_name
+                                + " WHERE "
+                                + utils.equalized_keyvals(primary_keys);
+            return query_string;
         }
     }
 };
