@@ -37,7 +37,7 @@ people.r({
 
 **update**
 
-\/\/ Modifying person 8675309 Ms. Jenny Monroe to Mrs. Jenny Schmidt
+// Modifying person 8675309 Ms. Jenny Monroe to Mrs. Jenny Schmidt
 
 people.u({ personID: 8675309 }, { last_name: "Schmidt" });
 
