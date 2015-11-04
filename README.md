@@ -15,7 +15,7 @@ var sqless = require('sqless'),
     people = sqless.Table('people');
     
 
-/*create*/
+**create**
 
 people.c({
   first_name: 'Stacy',
@@ -24,7 +24,7 @@ people.c({
 });
 
 
-/*read*/
+**read**
 
 people.r({
   age: 25
@@ -35,14 +35,14 @@ people.r({
 });
 
 
-/*update*/
+**update**
 
-// Modifying person 8675309 Ms. Jenny Monroe to Mrs. Jenny Schmidt
+\/\/ Modifying person 8675309 Ms. Jenny Monroe to Mrs. Jenny Schmidt
 
 people.u({ personID: 8675309 }, { last_name: "Schmidt" });
 
 
-/*delete*/
+**delete**
 
 people.d({ last_name: "Whitt" })
 .then(function () {
