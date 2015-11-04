@@ -8,7 +8,7 @@ Queries performed by these operations are based on asynchronous Q promises, and 
 
 # Examples
 
-var sqless = require('sqless'),
+    var sqless = require('sqless'),
 
     mysql  = require("mysql"),
     
@@ -19,34 +19,34 @@ var sqless = require('sqless'),
 
 **create**
 
-people.c({
-  first_name: 'Stacy',
-  last_name: 'Gantt',
-  age: 28
-});
+    people.c({
+      first_name: 'Stacy',
+      last_name: 'Gantt',
+      age: 28
+    });
 
 
 **read**
 
-people.r({
-  age: 25
-})
-.then(function (result) {
-  var count = result.records.length;
-  console.log("There are + " count " 25-year-old users in our records.");
-});
+    people.r({
+      age: 25
+    })
+    .then(function (result) {
+      var count = result.records.length;
+      console.log("There are + " count " 25-year-old users in our records.");
+    });
 
 
 **update**
 
-// Modifying person 8675309 Ms. Jenny Monroe to Mrs. Jenny Schmidt
-
-people.u({ personID: 8675309 }, { last_name: "Schmidt" });
+    // Modifying person 8675309 Ms. Jenny Monroe to Mrs. Jenny Schmidt
+    
+    people.u({ personID: 8675309 }, { last_name: "Schmidt" });
 
 
 **delete**
 
-people.d({ last_name: "Whitt" })
-.then(function () {
-  console.log("Database is now Whitless.");
-});
+    people.d({ last_name: "Whitt" })
+    .then(function () {
+      console.log("Database is now Whitless.");
+    });
