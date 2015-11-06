@@ -14,7 +14,7 @@ Queries performed by these operations are based on asynchronous Q promises, and 
     
     config = JSON.parse(fs.readFileSync('mysql_config.json')),
     
-    people = sqless.Table('people');
+    people = sqless.Table('people', config);
     
 
 **create**
