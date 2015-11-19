@@ -11,7 +11,7 @@ Queries performed by these operations are based on asynchronous Q promises, and 
     var sqless = require('sqless'),
     
     config = JSON.parse(fs.readFileSync('mysql_config.json'));
-    config.database_type = "mysql",
+    config.database_type = "mysql";
     
     var people = sqless.Table('people', config);
     
