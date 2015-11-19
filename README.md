@@ -9,12 +9,11 @@ Queries performed by these operations are based on asynchronous Q promises, and 
 # Examples
 
     var sqless = require('sqless'),
-
-    mysql  = require("mysql"),
     
-    config = JSON.parse(fs.readFileSync('mysql_config.json')),
+    config = JSON.parse(fs.readFileSync('mysql_config.json'));
+    config.database_type = "mysql",
     
-    people = sqless.Table('people', config);
+    var people = sqless.Table('people', config);
     
 
 **create**
@@ -33,7 +32,7 @@ Queries performed by these operations are based on asynchronous Q promises, and 
     })
     .then(function (result) {
       var count = result.records.length;
-      console.log("There are + " count " 25-year-old users in our records.");
+      console.log("There are " + count + " 25-year-old users in our records.");
     });
 
 
